@@ -13,7 +13,7 @@ type Databorad struct {
 	Repo  string
 }
 
-func NewDataboard(c *github.Client) *Databorad {
+func New(c *github.Client) *Databorad {
 	return &Databorad{
 		c: c,
 	}
