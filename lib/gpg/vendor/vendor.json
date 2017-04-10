@@ -1,0 +1,21 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "TT1rac6kpQp2vz24m5yDGUNQ/QQ=",
+			"path": "golang.org/x/crypto/cast5",
+			"revision": "728b753d0135da6801d45a38e6f43ff55779c5c2",
+			"revisionTime": "2017-01-24T01:46:54Z",
+			"tree": true
+		},
+		{
+			"checksumSHA1": "qEsIRWPnNipeJLMcUuGN7qRVKf8=",
+			"path": "golang.org/x/crypto/openpgp",
+			"revision": "728b753d0135da6801d45a38e6f43ff55779c5c2",
+			"revisionTime": "2017-01-24T01:46:54Z",
+			"tree": true
+		}
+	],
+	"rootPath": "github.com/immofon/databorad/lib/gpg"
+}
