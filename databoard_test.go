@@ -1,6 +1,8 @@
 package databoard
 
 import (
+	"context"
+	"os"
 	"testing"
 
 	"github.com/google/go-github/github"
@@ -12,4 +14,26 @@ func TestNew(t *testing.T) {
 	d.Token = ""
 	d.Owner = ""
 	d.Repo = ""
+}
+
+func initFromEnv(t *testing.T, d *Databoard) (*Databoard, bool) {
+	d.Token = os.Getenv("GITHUB_TOKEN")
+	d.Owner = os.Getenv("GITHUB_OWNER")
+	d.Repo = os.Getenv("GITHUB_REPO")
+
+	if d.Token == "" || d.Owner == "" || d.Repo == "" {
+		t.Error("expect $GITHUB_TOKEN,$GITHUB_OWNER,$GITHUB_REPO")
+		return nil, false
+	}
+	return d, true
+}
+func TestDataboard_GetLateRelease(t *testing.T) {
+	d, ok := initFromEnv(t, New(github.NewClient(nil)))
+	if !ok {
+		return
+	}
+	_, err := d.GetLatestRelease(context.TODO())
+	if err != nil {
+		t.Fatal(err)
+	}
 }
