@@ -1,4 +1,4 @@
-package databorad
+package databoard
 
 import (
 	"context"
@@ -6,20 +6,20 @@ import (
 	"github.com/google/go-github/github"
 )
 
-type Databorad struct {
+type Databoard struct {
 	c     *github.Client
 	Token string
 	Owner string
 	Repo  string
 }
 
-func New(c *github.Client) *Databorad {
-	return &Databorad{
+func New(c *github.Client) *Databoard {
+	return &Databoard{
 		c: c,
 	}
 }
 
-func (d *Databorad) GetLatestRelease(ctx context.Context) (*github.RepositoryRelease, error) {
+func (d *Databoard) GetLatestRelease(ctx context.Context) (*github.RepositoryRelease, error) {
 	ret, _, err := d.c.Repositories.GetLatestRelease(ctx, d.Owner, d.Repo)
 	return ret, err
 }
