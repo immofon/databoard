@@ -38,16 +38,29 @@ func (d *Databoard) GetLatestRelease(ctx context.Context) (*github.RepositoryRel
 	return ret, err
 }
 
-func (d *Databoard) GetReleases(ctx context.Context) (<-chan *github.RepositoryRelease, error) {
-	ch := make(chan *github.RepositoryRelease)
+func (d *Databoard) GetReleases(ctx context.Context, perpage int) (rch <-chan *github.RepositoryRelease, cancel func(), err error) {
+	ctx, cancel = context.WithCancel(ctx)
+	if perpage < 1 {
+		perpage = 1
+	}
+
+	ch := make(chan *github.RepositoryRelease, perpage)
 
 	go func(ch chan<- *github.RepositoryRelease) {
 		defer close(ch)
-		listOptions := &github.ListOptions{
-			Page:    1,
-			PerPage: 1,
-		}
+		var (
+			listOptions = &github.ListOptions{
+				Page:    1,
+				PerPage: perpage,
+			}
+		)
 		for {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+			}
+
 			releases, resp, err := d.c.Repositories.ListReleases(ctx, d.Owner, d.Repo, listOptions)
 			if err != nil {
 				return
@@ -68,5 +81,5 @@ func (d *Databoard) GetReleases(ctx context.Context) (<-chan *github.RepositoryR
 			listOptions.Page = resp.NextPage
 		}
 	}(ch)
-	return ch, nil
+	return ch, cancel, nil
 }

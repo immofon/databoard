@@ -2,6 +2,7 @@ package databoard
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"testing"
 
@@ -39,5 +40,20 @@ func TestDataboard_GetLatestRelease(t *testing.T) {
 	_, err := d.GetLatestRelease(context.TODO())
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestDataboard_GetReleases(t *testing.T) {
+	d, ok := getDataboardFromEnv(t)
+	if !ok {
+		return
+	}
+	releases, _, err := d.GetReleases(context.TODO(), 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for r := range releases {
+		fmt.Println(*r.TagName, r.PublishedAt)
 	}
 }
