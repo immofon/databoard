@@ -9,26 +9,30 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	d := New(nil)
+	d := New(nil, "")
 	d.c = (*github.Client)(nil)
-	d.Token = ""
 	d.Owner = ""
 	d.Repo = ""
 }
 
 func initFromEnv(t *testing.T, d *Databoard) (*Databoard, bool) {
-	d.Token = os.Getenv("GITHUB_TOKEN")
 	d.Owner = os.Getenv("GITHUB_OWNER")
 	d.Repo = os.Getenv("GITHUB_REPO")
 
-	if d.Token == "" || d.Owner == "" || d.Repo == "" {
+	if os.Getenv("GITHUB_TOKEN") == "" || d.Owner == "" || d.Repo == "" {
 		t.Error("expect $GITHUB_TOKEN,$GITHUB_OWNER,$GITHUB_REPO")
 		return nil, false
 	}
 	return d, true
 }
+
+func getDataboardFromEnv(t *testing.T) (d *Databoard, ok bool) {
+	d, ok = initFromEnv(t, New(nil, os.Getenv("GITHUB_TOKEN")))
+	return
+}
+
 func TestDataboard_GetLateRelease(t *testing.T) {
-	d, ok := initFromEnv(t, New(github.NewClient(nil)))
+	d, ok := getDataboardFromEnv(t)
 	if !ok {
 		return
 	}
