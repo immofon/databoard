@@ -3,6 +3,7 @@ package databoard
 import (
 	"context"
 	"net/http"
+	"os"
 
 	"golang.org/x/oauth2"
 
@@ -82,4 +83,15 @@ func (d *Databoard) GetReleases(ctx context.Context, perpage int) (rch <-chan *g
 		}
 	}(ch)
 	return ch, cancel, nil
+}
+
+func (d *Databoard) UploadReleaseAsset(ctx context.Context, release_id int, file *os.File, name string) (*github.ReleaseAsset, error) {
+	if name == "" {
+		name = file.Name()
+	}
+	asset, _, err := d.c.Repositories.UploadReleaseAsset(ctx, d.Owner, d.Repo, release_id, &github.UploadOptions{
+		Name: name,
+	}, file)
+
+	return asset, err
 }
