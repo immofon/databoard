@@ -31,7 +31,7 @@ func getDataboardFromEnv(t *testing.T) (d *Databoard, ok bool) {
 	return
 }
 
-func TestDataboard_GetLateRelease(t *testing.T) {
+func TestDataboard_GetLatestRelease(t *testing.T) {
 	d, ok := getDataboardFromEnv(t)
 	if !ok {
 		return
