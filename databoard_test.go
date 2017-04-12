@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-github/github"
+	"github.com/juju/errors"
 )
 
 func TestNew(t *testing.T) {
@@ -55,5 +56,18 @@ func TestDataboard_GetReleases(t *testing.T) {
 
 	for r := range releases {
 		fmt.Println(*r.TagName, r.PublishedAt)
+	}
+}
+
+func TestDataboard_GetReleasesByTag(t *testing.T) {
+	d, ok := getDataboardFromEnv(t)
+	if !ok {
+		return
+	}
+
+	_, err := d.GetReleaseByTag(context.TODO(), os.Getenv("GITHUB_REPO_TAG"))
+	err = errors.Annotate(err, "expect $GITHUB_REPO_TAG")
+	if err != nil {
+		t.Fatal(errors.ErrorStack(err))
 	}
 }

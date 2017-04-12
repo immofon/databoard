@@ -8,6 +8,7 @@ import (
 	"golang.org/x/oauth2"
 
 	"github.com/google/go-github/github"
+	"github.com/juju/errors"
 )
 
 type Databoard struct {
@@ -94,4 +95,13 @@ func (d *Databoard) UploadReleaseAsset(ctx context.Context, release_id int, file
 	}, file)
 
 	return asset, err
+}
+
+func (d *Databoard) GetReleaseByTag(ctx context.Context, tag string) (*github.RepositoryRelease, error) {
+	if tag == "" {
+		return nil, errors.New("empty tag")
+	}
+
+	release, _, err := d.c.Repositories.GetReleaseByTag(ctx, d.Owner, d.Repo, tag)
+	return release, errors.Annotatef(err, "github.RepositoriesService.GetReleaseByTag <tag: %q>", tag)
 }
