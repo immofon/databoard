@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -31,5 +32,8 @@ func exit(code int, v ...interface{}) {
 
 func exitf(code int, format string, v ...interface{}) {
 	fmt.Fprintf(os.Stderr, format, v...)
+	if !strings.HasSuffix(format, "\n") {
+		os.Stderr.Write([]byte{'\n'})
+	}
 	os.Exit(code)
 }
