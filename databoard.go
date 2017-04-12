@@ -105,3 +105,15 @@ func (d *Databoard) GetReleaseByTag(ctx context.Context, tag string) (*github.Re
 	release, _, err := d.c.Repositories.GetReleaseByTag(ctx, d.Owner, d.Repo, tag)
 	return release, errors.Annotatef(err, "github.RepositoriesService.GetReleaseByTag <tag: %q>", tag)
 }
+
+func (d *Databoard) CreateRelease(ctx context.Context, tag string) (*github.RepositoryRelease, error) {
+	if tag == "" {
+		return nil, errors.New("empty tag")
+	}
+
+	release, _, err := d.c.Repositories.CreateRelease(ctx, d.Owner, d.Repo, &github.RepositoryRelease{
+		TagName: github.String(tag),
+	})
+
+	return release, errors.Annotatef(err, "github.RepositoriesService.CreateRelease <tag: %q>", tag)
+}
