@@ -23,3 +23,13 @@ func Execute() {
 
 func init() {
 }
+
+func exit(code int, v ...interface{}) {
+	fmt.Fprintln(os.Stderr, v...)
+	os.Exit(code)
+}
+
+func exitf(code int, format string, v ...interface{}) {
+	fmt.Fprintf(os.Stderr, format, v...)
+	os.Exit(code)
+}
