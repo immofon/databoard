@@ -104,7 +104,5 @@ func init() {
 		if err != nil {
 			exit(8, errors.ErrorStack(errors.Trace(err)))
 		}
-
-		exit(0)
 	}
 }

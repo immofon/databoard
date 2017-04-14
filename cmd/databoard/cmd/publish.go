@@ -88,8 +88,6 @@ func init() {
 		if err != nil {
 			exit(9, errors.ErrorStack(errors.Annotatef(err, "Databoard.UploadReleaseAsset <release_id:%d>", release_id)))
 		}
-
-		exit(0)
 	}
 }
 

@@ -66,14 +66,13 @@ func init() {
 			if err != nil {
 				exit(5, errors.ErrorStack(errors.Trace(err)))
 			}
-			exit(0)
+			return
 		}
 
 		err = os.Link(data_tar_gz_gpg, output)
 		if err != nil {
 			exit(6, errors.ErrorStack(errors.Trace(err)))
 		}
-
 	}
 }
 
