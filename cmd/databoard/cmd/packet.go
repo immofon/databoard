@@ -31,25 +31,16 @@ func init() {
 	// packetCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	// packet <file> [file [files...]]
-	var (
-		passphareString string
-	)
-
-	packetCmd.Flags().StringVarP(&passphareString, "passphare", "p", "", "AES256 passphare")
-
 	packetCmd.Run = func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			packetCmd.Usage()
 			exit(1)
 		}
 
-		var passphare []byte
-		switch {
-		case passphareString != "":
-			passphare = []byte(passphareString)
-		default:
+		passphare, err := getPassphare()
+		if err != nil {
 			packetCmd.Usage()
-			exit(2, "require passphare")
+			exit(2, "require passphare\n", errors.ErrorStack(errors.Trace(err)))
 		}
 
 		basedir := fmt.Sprintf("/tmp/databoard-%d", os.Getpid())

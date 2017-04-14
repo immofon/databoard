@@ -29,25 +29,19 @@ func init() {
 	// is called directly, e.g.:
 	// unpackCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	var (
-		passphareString string
-		src             string // file name
-		dst             string // dir  name
+		src string // file name
+		dst string // dir  name
 	)
 
-	unpackCmd.Flags().StringVarP(&passphareString, "passphare", "p", "", "AES256 passphare")
 	unpackCmd.Flags().StringVarP(&src, "src", "s", "", "src file(must end with .tar.gz.gpg)")
 	unpackCmd.Flags().StringVarP(&dst, "dst", "d", "", "dst dir")
 
 	unpackCmd.Run = func(cmd *cobra.Command, args []string) {
-		var passphare []byte
-		switch {
-		case passphareString != "":
-			passphare = []byte(passphareString)
-		default:
+		passphare, err := getPassphare()
+		if err != nil {
 			unpackCmd.Usage()
-			exit(1, "require passphare")
+			exit(1, "require passphare\n", errors.ErrorStack(errors.Trace(err)))
 		}
-
 		err := Unpack(src, passphare, dst)
 		if err != nil {
 			exit(2, errors.ErrorStack(errors.Annotatef(err, "Unpack %q to %q", src, dst)))
