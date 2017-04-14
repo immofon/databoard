@@ -35,7 +35,7 @@ func init() {
 		output string // default os.Stdout
 	)
 
-	packetCmd.Flags().StringVarP(&output, "output", "o", "", "output file name")
+	packetCmd.Flags().StringVarP(&output, "output", "o", "", "output file name(recommand end with .tar.gz.gpg)")
 
 	packetCmd.Run = func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
