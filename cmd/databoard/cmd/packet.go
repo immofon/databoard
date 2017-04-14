@@ -31,6 +31,12 @@ func init() {
 	// packetCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	// packet <file> [file [files...]]
+	var (
+		output string // default os.Stdout
+	)
+
+	packetCmd.Flags().StringVarP(&output, "output", "o", "", "output file name")
+
 	packetCmd.Run = func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			packetCmd.Usage()
@@ -50,7 +56,24 @@ func init() {
 			exit(3, errors.ErrorStack(errors.Trace(err)))
 		}
 
-		os.Link(data_tar_gz_gpg, "data.tar.gz.gpg")
+		if output == "" {
+			in, err := os.Open(data_tar_gz_gpg)
+			if err != nil {
+				exit(4, errors.ErrorStack(errors.Trace(err)))
+			}
+
+			_, err = io.Copy(os.Stdout, in)
+			if err != nil {
+				exit(5, errors.ErrorStack(errors.Trace(err)))
+			}
+			exit(0)
+		}
+
+		err = os.Link(data_tar_gz_gpg, output)
+		if err != nil {
+			exit(6, errors.ErrorStack(errors.Trace(err)))
+		}
+
 	}
 }
 

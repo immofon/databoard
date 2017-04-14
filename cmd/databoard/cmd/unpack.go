@@ -42,7 +42,7 @@ func init() {
 			unpackCmd.Usage()
 			exit(1, "require passphare\n", errors.ErrorStack(errors.Trace(err)))
 		}
-		err := Unpack(src, passphare, dst)
+		err = Unpack(src, passphare, dst)
 		if err != nil {
 			exit(2, errors.ErrorStack(errors.Annotatef(err, "Unpack %q to %q", src, dst)))
 		}
