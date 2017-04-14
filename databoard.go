@@ -21,14 +21,20 @@ func New(hc *http.Client, token string) *Databoard {
 	if hc == nil {
 		hc = &http.Client{}
 	}
-	hc.Transport = &oauth2.Transport{
-		Base: hc.Transport,
-		Source: oauth2.ReuseTokenSource(nil, oauth2.StaticTokenSource(
-			&oauth2.Token{AccessToken: token},
-		)),
+
+	hc4github := &http.Client{
+		Transport: &oauth2.Transport{
+			Base: hc.Transport,
+			Source: oauth2.ReuseTokenSource(nil, oauth2.StaticTokenSource(
+				&oauth2.Token{AccessToken: token},
+			)),
+		},
+		CheckRedirect: hc.CheckRedirect,
+		Jar:           hc.Jar,
+		Timeout:       hc.Timeout,
 	}
 
-	client := github.NewClient(hc)
+	client := github.NewClient(hc4github)
 
 	return &Databoard{
 		c: client,
