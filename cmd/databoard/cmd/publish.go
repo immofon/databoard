@@ -7,7 +7,6 @@ import (
 	"io"
 	"os"
 
-	"github.com/immofon/databoard"
 	"github.com/juju/errors"
 	"github.com/spf13/cobra"
 )
@@ -68,10 +67,8 @@ func init() {
 
 		// create new release by tagName
 		ctx := context.Background()
+		d := newDataboard()
 
-		d := databoard.New(nil, token)
-		d.Owner = owner
-		d.Repo = repo
 		release, err := d.CreateRelease(ctx, tagName)
 		if err != nil {
 			exit(7, errors.ErrorStack(errors.Annotatef(err, "Databoard.CreateRelease <tag_name:%q>", tagName)))
