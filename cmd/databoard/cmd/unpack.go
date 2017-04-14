@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -29,11 +28,29 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// unpackCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	var (
+		passphareString string
+		src             string // file name
+		dst             string // dir  name
+	)
+
+	unpackCmd.Flags().StringVarP(&passphareString, "passphare", "p", "", "AES256 passphare")
+	unpackCmd.Flags().StringVarP(&src, "src", "s", "", "src file(must end with .tar.gz.gpg)")
+	unpackCmd.Flags().StringVarP(&dst, "dst", "d", "", "dst dir")
 
 	unpackCmd.Run = func(cmd *cobra.Command, args []string) {
-		err := Unpack("data.tar.gz.gpg", []byte("abc"), "databoard-tmp")
+		var passphare []byte
+		switch {
+		case passphareString != "":
+			passphare = []byte(passphareString)
+		default:
+			unpackCmd.Usage()
+			exit(1, "require passphare")
+		}
+
+		err := Unpack(src, passphare, dst)
 		if err != nil {
-			panic(err)
+			exit(2, errors.ErrorStack(errors.Annotatef(err, "Unpack %q to %q", src, dst)))
 		}
 	}
 }
@@ -46,6 +63,7 @@ func Unpack(srcfile string, passphare []byte, dstDir string) error {
 	if err != nil {
 		return errors.Annotate(err, "GPG symmetric decrypt")
 	}
+	defer os.Remove(plaintfile)
 
 	err = archiver.TarGz.Open(plaintfile, dstDir)
 	if err != nil {
@@ -66,7 +84,6 @@ func GPGDecrypt(cipherfile string, passphare []byte) (plainfile string, err erro
 	}
 
 	plainfile = cipherfile[:len(cipherfile)-len(".gpg")]
-	fmt.Println("plainfile:", plainfile)
 	out, err := os.OpenFile(plainfile, os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return "", errors.Trace(err)
