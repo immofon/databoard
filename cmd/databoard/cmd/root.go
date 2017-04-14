@@ -12,6 +12,7 @@ import (
 
 	"golang.org/x/net/proxy"
 
+	"github.com/immofon/databoard"
 	"github.com/spf13/cobra"
 )
 
@@ -105,6 +106,13 @@ func getHttpClient() *http.Client {
 		}
 	}
 	return httpClient
+}
+
+func newDataboard() *databoard.Databoard {
+	d := databoard.New(getHttpClient(), token)
+	d.Owner = owner
+	d.Repo = repo
+	return d
 }
 
 func exit(code int, v ...interface{}) {

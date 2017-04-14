@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"github.com/google/go-github/github"
-	"github.com/immofon/databoard"
 	"github.com/juju/errors"
 	"github.com/spf13/cobra"
 )
@@ -46,9 +45,7 @@ func init() {
 			exit(1, "require passphare\n", errors.ErrorStack(errors.Trace(err)))
 		}
 
-		d := databoard.New(nil, token)
-		d.Owner = owner
-		d.Repo = repo
+		d := newDataboard()
 
 		// get release assets by tag or latest release assets
 		var (
