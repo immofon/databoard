@@ -11,7 +11,8 @@ import (
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
-	Use: "list",
+	Use:     "list",
+	Aliases: []string{"ls"},
 }
 
 func init() {
