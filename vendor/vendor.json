@@ -1,0 +1,14 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "+zeuBilPh7Q+CxDu1rnUlAjbda0=",
+			"path": "golang.org/x/oauth2",
+			"revision": "efb10a30610e617dbb17fc243f4cc61a8cfa2903",
+			"revisionTime": "2017-03-02T20:04:53Z",
+			"tree": true
+		}
+	],
+	"rootPath": "github.com/immofon/databoard"
+}

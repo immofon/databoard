@@ -1,0 +1,31 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "Y+HGqEkYM15ir+J93MEaHdyFy0c=",
+			"path": "golang.org/x/net/context",
+			"revision": "a6577fac2d73be281a500b310739095313165611",
+			"revisionTime": "2017-03-08T20:54:49Z"
+		},
+		{
+			"checksumSHA1": "fjMK2G5arnjllpoeBYeyf9Y2Iok=",
+			"path": "golang.org/x/net/proxy",
+			"revision": "a6577fac2d73be281a500b310739095313165611",
+			"revisionTime": "2017-03-08T20:54:49Z"
+		},
+		{
+			"checksumSHA1": "Zt7DIRCaUg5qfhfxyR1wCA+EjCE=",
+			"path": "golang.org/x/oauth2",
+			"revision": "efb10a30610e617dbb17fc243f4cc61a8cfa2903",
+			"revisionTime": "2017-03-02T20:04:53Z"
+		},
+		{
+			"checksumSHA1": "gChvVZYdb6Bw/vjIpfYJfNvXPoU=",
+			"path": "golang.org/x/oauth2/internal",
+			"revision": "efb10a30610e617dbb17fc243f4cc61a8cfa2903",
+			"revisionTime": "2017-03-02T20:04:53Z"
+		}
+	],
+	"rootPath": "github.com/immofon/databoard/cmd/databoard/cmd"
+}
