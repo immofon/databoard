@@ -1,10 +1,16 @@
 package cmd
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"net"
+	"net/http"
+	"net/url"
 	"os"
 	"strings"
+
+	"golang.org/x/net/proxy"
 
 	"github.com/spf13/cobra"
 )
@@ -68,6 +74,37 @@ func getPassphare() (pass []byte, err error) {
 	}
 
 	return
+}
+
+var (
+	httpClient *http.Client
+)
+
+func getHttpClient() *http.Client {
+	if httpClient == nil {
+		httpClient = &http.Client{}
+
+		if allProxy := os.Getenv("all_proxy"); allProxy != "" {
+			httpClient.Transport = func() *http.Transport {
+				u, err := url.Parse(allProxy)
+				if err != nil {
+					return nil
+				}
+
+				dialer, err := proxy.FromURL(u, proxy.Direct)
+				if err != nil {
+					return nil
+				}
+
+				return &http.Transport{
+					DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+						return dialer.Dial(network, addr)
+					},
+				}
+			}()
+		}
+	}
+	return httpClient
 }
 
 func exit(code int, v ...interface{}) {

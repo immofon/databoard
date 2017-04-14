@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"net/http"
 	"os"
 
 	"github.com/google/go-github/github"
@@ -82,9 +81,10 @@ func init() {
 		}
 
 		tmpdir := fmt.Sprintf("/tmp/databoard-%d", os.Getpid())
+		os.Mkdir(tmpdir, 0700)
 		defer os.RemoveAll(tmpdir)
 
-		resp, err := http.Get(asset.GetBrowserDownloadURL())
+		resp, err := getHttpClient().Get(asset.GetBrowserDownloadURL())
 		if err != nil {
 			exit(5, errors.ErrorStack(errors.Trace(err)))
 		}
