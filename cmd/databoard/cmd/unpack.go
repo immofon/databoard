@@ -8,6 +8,7 @@ import (
 
 	"github.com/immofon/databoard/lib/gpg"
 	"github.com/juju/errors"
+	"github.com/mholt/archiver"
 	"github.com/spf13/cobra"
 )
 
@@ -30,13 +31,28 @@ func init() {
 	// unpackCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	unpackCmd.Run = func(cmd *cobra.Command, args []string) {
-		plaintfile, err := GPGDecrypt("data.tar.gz.gpg", []byte("abc"))
+		err := Unpack("data.tar.gz.gpg", []byte("abc"), "databoard-tmp")
 		if err != nil {
 			panic(err)
 		}
-
-		fmt.Println(plaintfile)
 	}
+}
+
+func Unpack(srcfile string, passphare []byte, dstDir string) error {
+	if !strings.HasSuffix(srcfile, ".tar.gz.gpg") {
+		return errors.Errorf("srcfile hasn't suffix .tar.gz.gpg <srcfile: %q>", srcfile)
+	}
+	plaintfile, err := GPGDecrypt(srcfile, passphare)
+	if err != nil {
+		return errors.Annotate(err, "GPG symmetric decrypt")
+	}
+
+	err = archiver.TarGz.Open(plaintfile, dstDir)
+	if err != nil {
+		return errors.Annotate(err, "archiver.TarGz.Open")
+	}
+
+	return nil
 }
 
 func GPGDecrypt(cipherfile string, passphare []byte) (plainfile string, err error) {
