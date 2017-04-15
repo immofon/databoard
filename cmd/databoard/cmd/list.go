@@ -70,11 +70,17 @@ func init() {
 			exit(4, errors.ErrorStack(errors.Trace(err)))
 		}
 
+		var size = 0
 		for release := range rch {
+			if size >= first {
+				break
+			}
+
 			var asset *github.ReleaseAsset
 			for _, a := range release.Assets {
 				if a.GetName() == "data.tar.gz.gpg" {
 					asset = &a
+					size++
 					break
 				}
 			}
