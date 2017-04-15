@@ -37,6 +37,14 @@ func init() {
 	listCmd.Flags().IntVarP(&first, "first", "", first, "show first size of releases")
 
 	listCmd.Run = func(cmd *cobra.Command, args []string) {
+		switch {
+		case owner == "":
+			exit(1, "require owner")
+		case repo == "":
+			exit(2, "require repo")
+		case token == "":
+			exit(3, "require token")
+		}
 
 		var (
 			d       = newDataboard()
@@ -59,7 +67,7 @@ func init() {
 		}
 
 		if err != nil {
-			exit(1, errors.ErrorStack(errors.Trace(err)))
+			exit(4, errors.ErrorStack(errors.Trace(err)))
 		}
 
 		for release := range rch {
