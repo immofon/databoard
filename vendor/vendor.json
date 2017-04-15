@@ -3,6 +3,12 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "Y+HGqEkYM15ir+J93MEaHdyFy0c=",
+			"path": "golang.org/x/net/context",
+			"revision": "a6577fac2d73be281a500b310739095313165611",
+			"revisionTime": "2017-03-08T20:54:49Z"
+		},
+		{
 			"checksumSHA1": "+zeuBilPh7Q+CxDu1rnUlAjbda0=",
 			"path": "golang.org/x/oauth2",
 			"revision": "efb10a30610e617dbb17fc243f4cc61a8cfa2903",
